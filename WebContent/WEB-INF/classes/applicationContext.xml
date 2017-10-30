@@ -1,0 +1,208 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+               http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+               http://www.springframework.org/schema/context
+               http://www.springframework.org/schema/context/spring-context-4.0.xsd
+               http://www.springframework.org/schema/tx
+               http://www.springframework.org/schema/tx/spring-tx-4.0.xsd
+               http://www.springframework.org/schema/aop
+               http://www.springframework.org/schema/aop/spring-aop-4.0.xsd">
+    <!-- 1.引入jdbc配置文件 -->
+	<bean id="propertyConfigurer"
+		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+		<property name="locations">
+			<list>
+				<value>classpath*:jdbc.properties</value>
+			</list>
+		</property>
+	</bean>
+	<!-- 2.配置数据源，使用DBCP数据源 --><!-- c3p0 -->
+	<bean id="dataSource"
+		class="org.apache.commons.dbcp.BasicDataSource"
+		destroy-method="close">
+		<!-- 数据库的驱动 -->
+		<property name="driverClassName" value="${jdbc.driverClass}" />
+		<!-- 数据库的URL -->
+		<property name="url" value="${jdbc.url}" />
+		<!-- 指定数据库的用户名 -->
+		<property name="username" value="${jdbc.username}" />
+		<!-- 指定数据库的密码 -->
+		<property name="password" value="${jdbc.password}" />
+		<!-- 指定数据库的最大连接数100 -->
+		<property name="maxActive" value="100" />
+		<!-- 指定数据库的最大空闲连接数30 -->
+		<property name="maxIdle" value="30" />
+		<!-- 指定数据库的最大等待数300 -->
+		<property name="maxWait" value="300" />
+		<!-- 指定数据库的默认自动提交 -->
+		<property name="defaultAutoCommit" value="true" />
+		<!-- 指定数据库的连接超时时是否启动自动回收 -->
+		<property name="removeAbandoned" value="true" />
+		<!-- 指定数据库的删除数据库连接的超时时长 -->
+		<property name="removeAbandonedTimeout" value="60" />
+		<!-- 记录没有关闭的链接日志 -->
+		<property name="logAbandoned" value="true" />
+	</bean>
+
+	<!-- 3.配置Hibernate的SessionFactory -->
+	<bean id="sessionFactory"
+		class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
+		<!-- 依赖注入SessionFactory所需的数据源DataSource-->
+		<property name="dataSource" ref="dataSource" />
+		<!-- 指定Hibernate的属性 -->
+		<property name="hibernateProperties">
+			<props>
+				<!--下面指定Hibernate使用的数据库方言 -->
+				<prop key="hibernate.dialect">org.hibernate.dialect.MySQLDialect</prop>
+				<prop key="hibernate.show_sql">true</prop>
+				<prop key="hibernate.format_sql">true</prop>
+				<prop key="hibernate.hbm2ddl.auto">update</prop>
+				<prop key="hibernate.current_session_context_class">org.springframework.orm.hibernate4.SpringSessionContext</prop>
+			</props>
+		</property>
+		
+		<!-- 加载所有的映射文件 -->
+		<property name="mappingResources">
+			<list>
+				<value>com/exam/student/model/Notice.hbm.xml</value>
+				<value>com/exam/student/model/QuestionBank.hbm.xml</value>
+				<value>com/exam/student/model/QuestionType.hbm.xml</value>
+				<value>com/exam/student/model/Record.hbm.xml</value>
+				<value>com/exam/student/model/Score.hbm.xml</value>
+				<value>com/exam/student/model/Student.hbm.xml</value>
+				<value>com/exam/student/model/Subject.hbm.xml</value>
+				<value>com/exam/student/model/Teacher.hbm.xml</value>
+			</list>
+		</property>
+	</bean> 
+	
+	<!-- 声明一个 Hibernate 4 的事务管理器供代理类自动管理事务用 -->
+	<bean id="myTxManager" class="org.springframework.orm.hibernate4.HibernateTransactionManager">
+		<property name="sessionFactory" ref="sessionFactory"></property>
+	</bean>
+	
+	<!-- 创建事务切面 -->
+	<tx:advice id="txAdvice" transaction-manager="myTxManager">
+		<tx:attributes>
+			<tx:method name="get*" propagation="REQUIRED" read-only="true" />
+			<tx:method name="add*" propagation="REQUIRED" />
+			<tx:method name="register*" propagation="REQUIRED" />
+			<tx:method name="save*" propagation="REQUIRED" />
+			<tx:method name="create*" propagation="REQUIRED" />
+			<tx:method name="update*" propagation="REQUIRED" />
+			<tx:method name="find*" propagation="REQUIRED"  read-only="true" />
+			<tx:method name="delete*" propagation="REQUIRED" />
+			<tx:method name="insert*" propagation="REQUIRED" />
+			<tx:method name="search*" propagation="REQUIRED"/>
+			<tx:method name="*" propagation="REQUIRED" read-only="true"/>
+		</tx:attributes>
+	</tx:advice>
+	<!-- 把切面注入到业务中 --> 
+	<aop:config>
+		<aop:pointcut id="productServiceMethods" expression="execution(* com.exam.student.service.spring.*.*(..))"></aop:pointcut>
+		<aop:advisor advice-ref="txAdvice" pointcut-ref="productServiceMethods"></aop:advisor>
+	</aop:config>
+	
+	<!-- 配置基类DAO -->   
+	<bean id="baseDao" class="com.exam.base.BaseDaoImp">
+		<property name="sessionFactory" ref="sessionFactory"/>
+	</bean>
+    <!-- 配置通知DAO -->
+    <bean id="noticeDao" class="com.exam.student.dao.hibernate.NoticeDaoImp">
+    	<property name="sessionFactory" ref="sessionFactory"/>
+    </bean>
+    <!-- 配置通知业务类 -->
+    <bean id="noticeService" class="com.exam.student.service.spring.NoticeServiceImp">
+    	<property name="noticeDao" ref="noticeDao"></property>
+    </bean>
+     <!-- 配置通知ACTION -->
+    <bean id="noticeAction" class="com.exam.student.action.NoticeAction">
+    	<property name="noticeService" ref="noticeService"></property>
+    </bean>
+    
+    <!-- 配置成绩DAO -->
+    <bean id="scoreDao" class="com.exam.student.dao.hibernate.ScoreDaoImp">
+    	<property name="sessionFactory" ref="sessionFactory"/>
+    </bean>
+    <!-- 配置成绩业务类 -->
+    <bean id="scoreService" class="com.exam.student.service.spring.ScoreServiceImp">
+    	<property name="scoreDao" ref="scoreDao"/>
+    </bean>
+    <!-- 配置成绩ACTION -->  
+    <bean id="scoreAction" class="com.exam.student.action.ScoreAction">
+    	<property name="scoreService" ref="scoreService"/>
+    </bean>
+    
+    <!-- 配置试卷记录DAO -->
+    <bean id="recordDao" class="com.exam.student.dao.hibernate.RecordDaoImp">
+    	<property name="sessionFactory" ref="sessionFactory"/>
+    </bean>
+    <!-- 配置试卷记录业务类 -->
+    <bean id="recordService" class="com.exam.student.service.spring.RecordServiceImp">
+    	<property name="recordDao" ref="recordDao"/>
+    </bean>   
+        <!-- 配置试卷记录ACTION类 -->
+    <bean id="recordAction" class="com.exam.student.action.RecordAction">
+    	<property name="recordService" ref="recordService"/>
+    </bean> 
+     <!-- 配置科目管理DAO -->
+    <bean id="subjectDao" class="com.exam.student.dao.hibernate.SubjectDaoImp" scope="prototype" parent="baseDao">
+    	<property name="sessionFactory" ref="sessionFactory"/>
+    </bean>
+    <!-- 配置科目管理业务类 -->
+    <bean id="subjectService" class="com.exam.student.service.spring.SubjectServiceImp">
+    	<property name="subjectDao" ref="subjectDao"/>
+    </bean>
+    <!-- 配置科目管理ACTION -->  
+    <bean id="subjectAction" class="com.exam.student.action.SubjectAction">
+    	<property name="subjectService" ref="subjectService"/>
+    </bean>   
+    
+        <!-- 配置学生DAO -->
+    <bean id="studentDao" class="com.exam.student.dao.hibernate.StudentDaoImp" scope="prototype" parent="baseDao">
+    	<property name="sessionFactory" ref="sessionFactory"/>
+    </bean>
+    <!-- 配置学生业务类 -->
+    <bean id="studentService" class="com.exam.student.service.spring.StudentServiceImp">
+    	<property name="studentDao" ref="studentDao"></property>
+    </bean>
+     <!-- 配置学生ACTION -->
+    <bean id="studentAction" class="com.exam.student.action.StudentAction">
+    	<property name="studentService" ref="studentService"/>
+    	<property name="subjectService" ref="subjectService"/>
+    </bean>
+    
+    <!-- 配置题库DAO -->
+    <bean id="questionBankDao" class="com.exam.student.dao.hibernate.QuestionBankDaoImp" scope="prototype" parent="baseDao">
+    	<property name="sessionFactory" ref="sessionFactory"/>
+    </bean>
+    <!-- 配置题库业务类 -->
+    <bean id="questionBankService" class="com.exam.student.service.spring.QuestionBankServiceImp">
+    	<property name="questionBankDao" ref="questionBankDao"></property>
+    </bean>
+     <!-- 配置试卷ACTION -->
+    <bean id="paperAction" class="com.exam.student.action.PaperAction">
+    	<property name="noticeService" ref="noticeService"/>
+    	<property name="recordService" ref="recordService"/>
+    	<property name="questionBankService" ref="questionBankService"/>
+    	<property name="scoreService" ref="scoreService"/>
+    	<property name="subjectService" ref="subjectService"/>
+    </bean>
+        <!-- 配置题库DAO -->
+    <bean id="teacherDao" class="com.exam.student.dao.hibernate.TeacherDaoImp" scope="prototype" parent="baseDao">
+    	<property name="sessionFactory" ref="sessionFactory"/>
+    </bean>
+    <!-- 配置题库业务类 -->
+    <bean id="teacherService" class="com.exam.student.service.spring.TeacherServiceImp">
+    	<property name="teacherDao" ref="teacherDao"></property>
+    </bean>
+     <!-- 配置试卷ACTION -->
+    <bean id="teacherAction" class="com.exam.student.action.TeacherAction">
+    	<property name="teacherService" ref="teacherService"/>
+    </bean>
+</beans>

@@ -1,0 +1,22 @@
+<!DOCTYPE hibernate-mapping PUBLIC 
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+    "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping package="com.exam.student.model">
+	<class name="Record" table="record">
+		<id name="fdId" column="fd_id">
+			<generator class="uuid"/>
+		</id>
+
+		<property name="fdPno" column="fd_pno" />
+		<property name="fdPname" column="fd_pname" />
+		<property name="fdTime" column="fd_time" />
+		<property name="fdScore" column="fd_score" />
+		<property name="fdNums" column="fd_nums" />
+		<property name="fdEasyNums" column="fd_easy_nums" />
+		<property name="fdMiddNums" column="fd_midd_nums" />
+		<property name="fdDiffNums" column="fd_diff_nums" />
+		
+		<many-to-one name="questionType" class="QuestionType"  column="fd_type_id" />
+	
+	</class>
+</hibernate-mapping>

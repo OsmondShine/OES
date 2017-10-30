@@ -1,0 +1,67 @@
+body{
+	background-image:url(../img/background.jpg);
+ 
+}
+
+#container{
+	width: 1298px;
+	margin:0 auto;
+	
+}
+
+.header{
+	/*position: relative;*/
+	background: url(../img/header.png)  center;
+	
+}
+ 
+ .center{
+ 	margin-left:0;
+	margin-right:auto;
+ }
+.imgCenter{
+	display:block; 
+	margin: 0 auto;
+
+}
+.word{
+	width:1298;
+	float:left;
+}
+
+
+.greyB{
+	display: block;
+	width: 166px;
+	height: 550px;
+
+	background:url(../img/greyB.jpg)  ;
+	
+}
+
+
+
+.content{
+	background-color: #FFFFFF;
+	width:1132px;
+	height:550px;
+	float:left;
+}
+
+
+.erji{
+	display:none;
+	background:url(../img/erji.jpg);
+	width:100px;
+	height:550px;
+	float:left;
+
+}
+
+.white_words{
+	color:#FFFFFF
+}
+
+.margin_top{
+	margin-top: 150px;
+}

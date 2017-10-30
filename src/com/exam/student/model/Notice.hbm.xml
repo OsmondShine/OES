@@ -1,0 +1,17 @@
+<!DOCTYPE hibernate-mapping PUBLIC 
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+    "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping package="com.exam.student.model">
+	<class name="Notice" table="notice">
+		<id name="fdId" column="fd_id">
+			<generator class="uuid"/>
+		</id>
+		
+		<property name="fdNoticeId" column="fd_notice_id" />
+		<property name="fdNoticeTitle" column="fd_notice_title" />
+		<property name="fdNoticeContent" column="fd_notice_content" />
+		<property name="fdStartTime" column="fd_start_time" />
+		<property name="fdEndTime" column="fd_end_time" />
+	
+	</class>
+</hibernate-mapping>

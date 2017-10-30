@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts PUBLIC
+"-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+"http://struts.apache.org/dtds/struts-2.0.dtd">
+
+<struts>
+	<constant name="struts.objectFactory" value="spring" />
+	<!-- 指定Web应用的默认编码集，相当于调用HttpServletRequest的setCharacterEncoding方法 -->
+	<constant name="struts.i18n.encoding" value="UTF-8" />
+	<package name="student" namespace="/" extends="struts-default">
+		<!--学生信息相关ACTION  -->
+		<action name="student_*" class="studentAction" method="{1}">
+			<result name="register" type="redirect">/student/registerSucc.jsp</result>
+			<result name="update" type="redirect">/student/updateSucc.jsp</result>
+			<result name="login" type="redirect">/student/index.jsp</result>
+			<result name="loginFailure" type="redirect">/student/login.jsp</result>
+			<result name="logout" type="redirect">/student/login.jsp</result>
+			<result name="addSubjects">/student/iframe/subjectView.jsp</result>
+			<result name="findList">/student/iframe/subjectView.jsp</result>
+		</action>
+		<!--考试通知相关ACTION  -->
+		<action name="notice_*" class="noticeAction" method="{1}">
+			<result name="notice">/student/iframe/exam_inform.jsp</result>	
+		</action>	
+		<!--考试相关ACTION  -->
+		<action name="paper_*" class="paperAction" method="{1}">
+			<result name="notice">/student/iframe/exam_inform.jsp</result>	
+			<result name="createNewPaper">/student/iframe/paperDetails.jsp</result>
+			<result name="handIn">/student/iframe/handInSucc.html</result>
+			<result name="find">/paperView.jsp</result>
+			<result name="delete">/paperView.jsp</result>
+		</action> 
+		<!--考试科目相关ACTION  -->
+		<action name="subject_*" class="subjectAction" method="{1}">
+			<result name="delete" >/student/iframe/subjectView.jsp</result>	
+			<result name="findAdd">/student/iframe/subjectAdd.jsp</result>	
+		</action>
+		<!--考试成绩相关ACTION  -->
+		<action name="score_*" class="scoreAction" method="{1}">
+			<result name="findScore">/student/iframe/findScore.jsp</result>	
+		</action>	
+			<!--试卷记录相关ACTION  -->
+		<action name="record_*" class="recordAction" method="{1}">
+			<result name="find">/paperView.jsp</result>
+			<result name="delete">/paperView.jsp</result>
+			<result name="create">/EM/paperView.jsp</result>
+		</action>	
+	</package>
+	<package name="teacher" namespace="/" extends="struts-default">
+		<!--教师相关ACTION  -->
+		<action name="teacher_*" class="teacherAction" method="{1}">
+			<result name="login" type="redirect">/adminIndex.jsp</result>
+		</action>
+		<!--考试通知相关ACTION  -->
+		<action name="notice_*" class="noticeAction" method="{1}">
+			<result name="notice">/student/iframe/exam_inform.jsp</result>	
+		</action>	
+		<!--考试相关ACTION  -->
+		<action name="paper_*" class="paperAction" method="{1}">
+			<result name="notice">/student/iframe/exam_inform.jsp</result>	
+			<result name="createNewPaper">/student/iframe/paperDetails.jsp</result>
+			<result name="handIn">/student/iframe/handInSucc.html</result>
+			<result name="find">/paperView.jsp</result>
+			<result name="delete">/paperView.jsp</result>
+		</action> 
+		<!--考试科目相关ACTION  -->
+		<action name="subject_*" class="subjectAction" method="{1}">
+			<result name="delete" >/student/iframe/subjectView.jsp</result>	
+			<result name="findAdd">/student/iframe/subjectAdd.jsp</result>	
+		</action>
+		<!--考试成绩相关ACTION  -->
+		<action name="score_*" class="scoreAction" method="{1}">
+			<result name="findScore">/student/iframe/findScore.jsp</result>	
+		</action>	
+			<!--试卷记录相关ACTION  -->
+		<action name="record_*" class="recordAction" method="{1}">
+			<result name="find">/paperView.jsp</result>
+			<result name="delete">/paperView.jsp</result>
+			<result name="create">/EM/paperView.jsp</result>
+		</action>	
+	</package>
+</struts>

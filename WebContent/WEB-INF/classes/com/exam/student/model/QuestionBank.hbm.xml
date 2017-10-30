@@ -1,0 +1,20 @@
+<!DOCTYPE hibernate-mapping PUBLIC 
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+    "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping package="com.exam.student.model">
+	<class name="QuestionBank" table="question_bank">
+		<id name="fdId" column="fd_id">
+			<generator class="uuid"/>
+		</id>
+
+		<property name="fdQno" column="fd_qno" />
+		<property name="fdDifficulty" column="fd_difficulty" />
+		<property name="fdQuestion" column="fd_question" />
+		<property name="fdContent" column="fd_content" />
+		<property name="fdAnswer" column="fd_answer" />
+		<property name="fdScore" column="fd_score" />
+		
+		<many-to-one name="questionType" class="QuestionType"  column="fd_type_id"  lazy="false"/>
+	
+	</class>
+</hibernate-mapping>

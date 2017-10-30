@@ -1,0 +1,43 @@
+iframe{
+	width: 1128px;
+	height: 546px;
+	background-color: #F9F9F9;
+}
+
+.table_mi{
+	margin:0 auto;
+	margin-top:30px;
+	
+}
+#clazz{
+	style="position:relative;left:-33px;"
+}
+
+span{
+	line-height:30px;
+	text-align: right;
+}
+
+input{
+	line-height: 30px;
+	width: 220px;
+}
+
+.button_info{
+	margin-right: 67px;
+	margin-top: 20px;
+	padding-left: 30px;
+	padding-right: 30px;
+}
+
+.title{
+	font-size: 30px;
+	text-align: center;
+	margin:30px
+}
+#td{
+	text-align:center
+}
+
+
+

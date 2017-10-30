@@ -1,0 +1,22 @@
+<!DOCTYPE hibernate-mapping PUBLIC 
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+    "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping package="com.exam.student.model">
+	<class name="Student" table="student">
+		<id name="fdId" column="fd_id">
+			<generator class="uuid"/>
+		</id>
+		
+		<property name="fdSno" column="fd_sno" />
+		<property name="fdName" column="fd_name" />
+		<property name="fdPassword" column="fd_password" />
+		<property name="fdClass" column="fd_class" />
+		<property name="fdSexuality" column="fd_sexuality" />
+		<property name="fdRight" column="fd_right" />
+		
+		<set name="fdSelectedSubjects" table="student_subject" cascade="all">
+			<key column="student_id"></key>
+			<many-to-many class="Subject" column="subject_id"/>
+		</set>	
+	</class>
+</hibernate-mapping>

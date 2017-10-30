@@ -1,0 +1,19 @@
+<!DOCTYPE hibernate-mapping PUBLIC 
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+    "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping package="com.exam.student.model">
+	<class name="Subject" table="subject">
+		<id name="fdId" column="fd_id">
+			<generator class="uuid"/>
+		</id>
+
+		<property name="fdCno" column="fd_cno" />
+		<property name="fdCname" column="fd_cname" />
+		<property name="fdHierarchyId" column="fd_hierarchy_id"></property>
+		
+		<set name="students" table="student_subject" cascade="all" inverse="true">
+			<key column="subject_id"></key>
+			<many-to-many class="Student" column="student_id"></many-to-many>
+		</set>	
+	</class>
+</hibernate-mapping>

@@ -1,0 +1,14 @@
+<!DOCTYPE hibernate-mapping PUBLIC 
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+    "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping package="com.exam.student.model">
+	<class name="QuestionType" table="question_type">
+		<id name="fdId" column="fd_id">
+			<generator class="uuid"/>
+		</id>
+
+		<property name="fdTypeId" column="fd_type_id" />
+		<property name="fdTypeName" column="fd_type_name" />
+	
+	</class>
+</hibernate-mapping>

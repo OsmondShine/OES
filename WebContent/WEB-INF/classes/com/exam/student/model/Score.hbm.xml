@@ -1,0 +1,17 @@
+<!DOCTYPE hibernate-mapping PUBLIC 
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+    "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping package="com.exam.student.model">
+	<class name="Score" table="score">
+		<id name="fdId" column="fd_id">
+			<generator class="uuid"/>
+		</id>
+
+		<property name="fdScore" column="fd_score" />
+		<property name="fdRemark" column="fd_remark" />
+		
+		<many-to-one name="student" class="Student"  column="fd_student_pk" fetch="join"/>
+		<many-to-one name="subject" class="Subject"  column="fd_cno" fetch="join"/>
+	
+	</class>
+</hibernate-mapping>
